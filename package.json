@@ -1,0 +1,16 @@
+{
+  "name": "neo-gis",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+  },
+  "engines": {
+    "node": "8.9.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Unlicense",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
