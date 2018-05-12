@@ -2,8 +2,7 @@
   "name": "neo-gis",
   "version": "0.0.1",
   "description": "",
-  "scripts": {
-  },
+  "scripts": {},
   "engines": {
     "node": "8.9.1"
   },
@@ -11,6 +10,8 @@
   "author": "",
   "license": "Unlicense",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "node-fetch": "^2.1.2",
+    "papaparse": "^4.4.0"
   }
 }
