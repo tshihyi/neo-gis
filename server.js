@@ -1,9 +1,6 @@
 const express = require('express')
 const convert = require('./convert')
-const getZipcode = () => {
-  const {readFileSync} = require('fs')
-  return Promise.resolve(readFileSync('./zip-code.csv').toString())
-}
+const getZipcode = require('./zip-code')
 
 const todo = () => getZipcode().then(convert)
 
