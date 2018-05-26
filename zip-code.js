@@ -1,17 +1,10 @@
-const fetch = require('node-fetch')
-const {URLSearchParams} = require('url')
+const download = require('./download')
 const iconv = require('iconv-lite')
-const papa = require('papaparse')
 const url = 'https://www.land.moi.gov.tw/ngis/chhtml/areadowncsv.asp'
 
 const getZipcode = () => {
-  const data = new URLSearchParams
-  data.append('R1','1')
-  data.append('county1','F')
-
-  const init = {method: 'POST', body: data}
-
-  return fetch(url, init).then(it => it.buffer())
+  const parameters = {'R1': '1', 'county1': 'F'}
+  return download(url, parameters).then(it => it.buffer())
   .then(buffer =>
     iconv.decode(buffer, 'Big5')
   )
