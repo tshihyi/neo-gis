@@ -14,7 +14,7 @@ const routes = [{
   path: '/land-code',
   handler: landCode
 }, {
-  method: 'get',
+  method: 'post',
   path: '/update-data-email',
   description: `
 自動自政府官網下載各種資料，並自動發送e-mail給該專案負責工程師。工程師依此檔更新DB資料。
@@ -27,6 +27,7 @@ const start = () => {
   const app = express()
   const port = process.env.PORT || 3000
 
+  app.use(express.json())
   routes.forEach(r => addRoute(app, r))
 
   app.listen(port, () => console.log('Service is running on port ' + port))

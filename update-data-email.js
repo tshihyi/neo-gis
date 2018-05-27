@@ -1,19 +1,31 @@
 const sendEmail = require('gmail-send')()
 const download = require('./download')
-const url = 'https://www.land.moi.gov.tw/ngis/chhtml/areadowncsv.asp'
-const parameters = {'R1': '1', 'county1': 'F'}
 
-const options = {
-  user: 'shelly.tu@linkchain.tw',
-  pass: 'qpqehbprojczzfbo',
-  subject: 'Hello dk',
-  text:    'gmail-send example 1',         // Plain text
-  to: [
-    'dk@csie.org'
-  ]
+const fs = require('fs')
+
+const saveFile = name => content => {
+  fs.writeFileSync(name, content)
+  return name
 }
 
+const downloadSave = ({url, parameters, name}) =>
+download(url, {method: 'post', parameters}).then(it => it.buffer())
+.then(saveFile(name))
+
+const mailAndLog = options => {
+  console.log(options)
+  sendEmail(options)
+}
+
+const downloadFiles = ({files, mailOptions}) =>
+Promise.all(files.map(downloadSave))
+.then(files =>
+  Object.assign({}, mailOptions, {
+    files: files.map(path => ({path}))
+  })
+)
+
 const updateDataEmail = req =>
-download(url, parameters)
+downloadFiles(req.body).then(mailAndLog)
 
 module.exports = updateDataEmail

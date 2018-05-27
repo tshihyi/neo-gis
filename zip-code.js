@@ -4,7 +4,7 @@ const url = 'https://www.land.moi.gov.tw/ngis/chhtml/areadowncsv.asp'
 
 const getZipcode = () => {
   const parameters = {'R1': '1', 'county1': 'F'}
-  return download(url, parameters).then(it => it.buffer())
+  return download(url, {method: 'post', parameters}).then(it => it.buffer())
   .then(buffer =>
     iconv.decode(buffer, 'Big5')
   )
