@@ -9,12 +9,11 @@ const createSearchParams = parameters => {
   return data
 }
 
-const withParameters = (url, parameters) => {
+const withParameters = (url, parameters={}) => {
   const merged = new URL(url)
   Object.entries(parameters).forEach(([k, v]) =>
     merged.searchParams.append(k, v)
   )
-  console.log(merged.toString())
   return merged
 }
 

@@ -1,11 +1,21 @@
 const express = require('express')
+const {entriesToObject} = require('./utils')
+const reverseProxy = require('./reverse-proxy')
 const landCode = require('./land-code')
 const updateDataEmail = require('./update-data-email')
 
-const addRoute = (app, {method, path, handler}) => {
+const sendResult = {
+  json: (res, result) => res.json(result),
+  pass: (res, result) => {
+    res.set(entriesToObject(result.headers))
+    result.buffer().then(it => res.end(it))
+  }
+}
+
+const addRoute = (app, {method='get', resultType='json', path, handler}) => {
   app[method](path, (req, res) =>
     Promise.resolve(handler(req))
-    .then(result => res.json(result))
+    .then(result => sendResult[resultType](res, result))
   )
 }
 
@@ -21,6 +31,11 @@ const routes = [{
 下載網址、收件人、寄件人帳號、寄件人密碼、主旨、附件檔名
   `,
   handler: updateDataEmail
+}, {
+  path: '/facility-assets/*',
+  description: 'Reverse proxy to http://118.163.241.213:82/',
+  resultType: 'pass',
+  handler: reverseProxy('http://118.163.241.213:82/')
 }]
 
 const start = () => {
