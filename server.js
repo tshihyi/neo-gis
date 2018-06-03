@@ -1,3 +1,4 @@
+const cors = require('cors')
 const express = require('express')
 const {entriesToObject} = require('./utils')
 const reverseProxy = require('./reverse-proxy')
@@ -7,8 +8,15 @@ const updateDataEmail = require('./update-data-email')
 const sendResult = {
   json: (res, result) => res.json(result),
   pass: (res, result) => {
-    res.set(entriesToObject(result.headers))
-    result.buffer().then(it => res.end(it))
+
+    result.buffer().then(it => {
+      res.set(Object.assign(entriesToObject(result.headers), {
+        'Content-Encoding': '',
+        'Content-Length': it.length
+      }))
+
+      res.end(it)
+    })
   }
 }
 
@@ -43,6 +51,7 @@ const start = () => {
   const port = process.env.PORT || 3000
 
   app.use(express.json())
+  app.use(cors({origin: true}))
   routes.forEach(r => addRoute(app, r))
 
   app.listen(port, () => console.log('Service is running on port ' + port))

@@ -1,8 +1,9 @@
 const download = require('./download')
 
-const reverseProxy = sourceURL => ({path}) => {
-  const url = path.replace('/facility-assets/', sourceURL)
-  return download(url, {})
+const reverseProxy = sourceURL => ({url, path}) => {
+  const resourceURL = path.replace('/facility-assets/', sourceURL) +
+  '?' + url.split('?')[1]
+  return download(resourceURL, {})
 }
 
 module.exports = reverseProxy
